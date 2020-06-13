@@ -1,0 +1,64 @@
+{% extends 'admin/layouts/main.html' %}
+{% block content %}
+    <div class="container-fluid">
+        {% include 'admin/layouts/alert-message.html' %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div id="app-sub-category">
+                        <div class="card-content table-responsive table-full-width">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Sub Category Name</th>
+                                    <th>Category Name</th>
+                                    <th>Creator</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for sub_category in sub_categories %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ sub_category.sub_category_name }}</td>
+                                        <td>{{ sub_category.category__name }}</td>
+                                        <td>{{ sub_category.created_by__first_name }}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-warning">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </a>
+                                            <a href="{% url 'admin-category:delete-sub-category' sub_category.id %}"
+                                               class="btn btn-sm btn-danger confirm"> <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if sub_categories.has_other_pages %}
+                                {% include "admin/layouts/paginator.html" with page_obj=sub_categories %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        var app = new Vue({
+            el: '#app-sub-category',
+            delimiters: ['[[', ']]'],
+        });
+        $(document).ready(function () {
+            $(".confirm").confirm({
+                text: "Are you sure you want to delete this data?",
+                confirmButtonClass: "btn-danger",
+                cancelButtonClass: "btn-default",
+                dialogClass: "modal-dialog" // Bootstrap classes for large modal
+            });
+        });
+    </script>
+{% endblock %}

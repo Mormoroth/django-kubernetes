@@ -1,0 +1,105 @@
+{% extends 'admin/layouts/main.html' %}
+{% block content %}
+    <div class="container-fluid">
+        {% include 'admin/layouts/alert-message.html' %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div id="app">
+                        <div class="card-content table-responsive table-full-width">
+                            <table class="table" id="category-table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Category Name</th>
+                                    <th>Creator</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for category in categories %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ category.name }}</td>
+                                        <td>{{ category.created_by__first_name }}</td>
+                                        <td>
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-sm btn-warning category-edit-btn"
+                                               category-data-id="{{ category.id }}">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </a>
+                                            <a href="{% url 'admin-category:delete-category' category.id %}" class="btn btn-sm btn-danger confirm">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if categories.has_other_pages %}
+                                {% include "admin/layouts/paginator.html" with page_obj=categories %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="edit-category-modal" tabindex="-1" role="dialog" aria-labelledby="postLikerLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Edit Product Category</h4>
+                    </div>
+                    <div class="modal-body modal-body-invite">
+                        <div id="edit-category"></div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 0px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['[[', ']]'],
+            data: {
+                dataTable: null,
+            },
+        });
+        $(document).ready(function () {
+            $('.category-edit-btn').click(function (e) {
+                const categoryID = $(this).attr('category-data-id');
+                $("#edit-category-modal").modal('show');
+                var pageUrl = '/admin/category/edit/' + categoryID;
+                $.ajax({
+                    type: "GET",
+                    url: pageUrl,
+                    beforeSend: function () {
+                        $("#edit-category").html('<div class="overlay loader-div"><i class="fa fa-refresh fa-spin"></i></div>');
+                    },
+                    success: function (data) {
+                        $("#edit-category").html(data);
+                    },
+                    error: function () {
+                        $("#edit-category").html("Failed to load data.");
+                    }
+                });
+                e.preventDefault();
+            });
+            $(".confirm").confirm({
+                text: "Are you sure you want to delete this data?",
+                confirmButtonClass: "btn-danger",
+                cancelButtonClass: "btn-default",
+                dialogClass: "modal-dialog" // Bootstrap classes for large modal
+            });
+        })
+    </script>
+{% endblock %}

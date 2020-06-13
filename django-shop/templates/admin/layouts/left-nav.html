@@ -1,0 +1,113 @@
+{% load static %}
+{% url 'admin-dashboard:index' as admin_dashboard_url %}
+{% url 'admin-product:index' as admin_product_index_url %}
+{% url 'admin-product:create' as admin_product_create_url %}
+{% url 'admin-category:index' as admin_category_index_url %}
+{% url 'admin-category:create-category' as admin_category_create_url %}
+{% url 'admin-category:sub-category-list' as admin_sub_category_list_url %}
+{% url 'admin-category:ss-category-list' as admin_ss_category_list_url %}
+<div class="sidebar" data-background-color="white" data-active-color="success">
+    <div class="logo">
+        <a href="{% url 'admin-dashboard:index' %}" class="simple-text logo-mini">
+            <img src="{% static 'admin/img/favicon-32x32.png' %}" alt="eShop">
+        </a>
+        <a href="{% url 'admin-dashboard:index' %}" class="simple-text logo-normal">
+            <img src="{% static 'admin/img/favicon-32x32.png' %}" alt="eShop"> eShop
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="user">
+            <div class="info">
+                <div class="photo">
+                    <img src="https://ui-avatars.com/api/?name={{ request.user.first_name }}&w=196&h=196"/>
+                </div>
+
+                <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                    <span>{{ request.user.first_name }} <b class="caret"></b></span>
+                </a>
+                <div class="clearfix"></div>
+
+                <div class="collapse" id="collapseExample">
+                    <ul class="nav">
+                        <li>
+                            <a href="#">
+                                <span class="sidebar-mini">Mp</span>
+                                <span class="sidebar-normal">My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'account:logout' %}">
+                                <div style="color: #ff4a5b">
+                                    <span class="sidebar-mini">L</span>
+                                    <span class="sidebar-normal">Logout</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ul class="nav">
+            <li {% if request.get_full_path == admin_dashboard_url %}class="active" {% endif %}>
+                <a href="{% url 'admin-dashboard:index' %}">
+                    <i class="ti-panel"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+            <li {% if request.get_full_path == admin_product_index_url or request.get_full_path == admin_product_create_url %}class="active" {% endif %}>
+                <a data-toggle="collapse" href="#productOverview" aria-expanded="false">
+                    <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                    <p>Product <b class="caret"></b></p>
+                </a>
+                <div class="collapse {% if request.get_full_path == admin_product_index_url or request.get_full_path == admin_product_create_url %}in {% endif %}"
+                     id="productOverview">
+                    <ul class="nav">
+                        <li {% if request.get_full_path == admin_product_index_ur %}class="active" {% endif %}>
+                            <a href="{% url 'admin-product:index' %}">
+                                <span class="sidebar-mini">L</span>
+                                <span class="sidebar-normal">List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="sidebar-mini">A</span>
+                                <span class="sidebar-normal">Archive</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li {% if request.get_full_path == admin_category_index_url or request.get_full_path == admin_category_create_url or request.get_full_path == admin_sub_category_list_url or request.get_full_path == admin_ss_category_list_url %}class="active" {% endif %}>
+                <a data-toggle="collapse" href="#categoryOverview" aria-expanded="false">
+                    <i class="fa fa-list-alt" aria-hidden="true"></i>
+                    <p>Category <b class="caret"></b></p>
+                </a>
+                <div class="collapse {% if request.get_full_path == admin_category_index_url or request.get_full_path == admin_category_create_url or request.get_full_path == admin_sub_category_list_url or request.get_full_path == admin_ss_category_list_url %}in {% endif %}"
+                     id="categoryOverview">
+                    <ul class="nav">
+                        <li {% if request.get_full_path == admin_category_index_url or request.get_full_path == admin_category_create_url %}class="active" {% endif %}>
+                            <a href="{% url 'admin-category:index' %}">
+                                <span class="sidebar-mini">L</span>
+                                <span class="sidebar-normal">List</span>
+                            </a>
+                        </li>
+                        <li {% if request.get_full_path == admin_sub_category_list_url %}class="active" {% endif %}>
+                            <a href="{% url 'admin-category:sub-category-list' %}">
+                                <span class="sidebar-mini">SC</span>
+                                <span class="sidebar-normal">Sub Category</span>
+                            </a>
+                        </li>
+
+                        <li {% if request.get_full_path == admin_ss_category_list_url %}class="active" {% endif %}>
+                            <a href="{% url 'admin-category:ss-category-list' %}">
+                                <span class="sidebar-mini">SSC</span>
+                                <span class="sidebar-normal">Sub Sub Category</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
