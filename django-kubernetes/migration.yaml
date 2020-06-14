@@ -11,7 +11,7 @@ spec:
           image: mormoroth/django:shop
           env:
             - name: DB_NAME
-              value: django
+              value: djangotest
             - name: DB_USER
               value: root
             - name: DB_PASS
